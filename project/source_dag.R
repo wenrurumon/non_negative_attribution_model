@@ -36,7 +36,7 @@ mat.sds <- function(dag.group){
 #SEM L1
 sem_l1 <- function(Y,lambda=0.1,times=10){
   adjs <- lapply(1:times,function(i){
-    Y <- Y[sample(1:nrow(Y),nrow(Y)*2/3),]
+    if(times!=1){Y <- Y[sample(1:nrow(Y),nrow(Y)*2/3),]}
     adj <- do.call(rbind,lapply(1:ncol(Y),function(i){
       slimi <- slim(X=Y[,-i],Y=Y[,i],lambda=lambda,
                     rho=1,method='lasso',verbose=FALSE)
@@ -55,7 +55,7 @@ sem_grplasso <- function(Y
                          ,Y.prop=(1/tapply(Y.group,Y.group,length))[Y.group]
                          ,lambda=.1,times=10){
   adjs <- lapply(1:times,function(i){
-    Y <- Y[sample(1:nrow(Y),nrow(Y)*2/3),]
+    if(times!=1){Y <- Y[sample(1:nrow(Y),nrow(Y)*2/3),]}
     adj <- do.call(rbind,lapply(1:ncol(Y),function(i){
       lambda <- lambdamax(x=cbind(1,Y[,-i]),y=Y[,i], 
                           index=c(NA,Y.group[-i]), 
