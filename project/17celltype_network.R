@@ -42,11 +42,24 @@ Y.sig <- Y[names(Y)%in%pathlist[grep('Sig',pathlist[,1]),2]]
 Y.d <- Y[names(Y)%in%pathlist[grep('Neurodegenerative',pathlist[,1]),2]]
 
 Y.model <- Y.d
-Y.sem <- sem_grplasso2(
-  Y=do.call(cbind,lapply(Y.model,function(x)x[[1]])),
-  Y.group=rep(1:length(Y.model),sapply(Y.model,function(x){ncol(x[[1]])})),
-  Y.prop=unlist(lapply(Y.model,function(x){x[[2]]})),
-  lambda1=.3,lambda2=.1,times=10,stability=.8)[[2]]>=.8
-Y.mat <- mat.sds(adj.group(Y.sem*unlist(lapply(Y.model,function(x){x[[2]]})),
-          Y.group=rep(1:length(Y.model),sapply(Y.model,function(x){ncol(x[[1]])}))))
-Y.cnif <- CNIF(data=do.call(cbind,lapply(Y.model,function(x){x[[1]]})),init.adj=Y.sem,max.parent=4)
+test <- function(Y.model){
+  Y.sem <- sem_grplasso2(
+    Y=do.call(cbind,lapply(Y.model,function(x)x[[1]])),
+    Y.group=rep(1:length(Y.model),sapply(Y.model,function(x){ncol(x[[1]])})),
+    Y.prop=unlist(lapply(Y.model,function(x){diff(c(0,x[[2]]))})),
+    lambda1=.3,lambda2=.1,times=10,stability=.8)[[2]]>=.8
+  Y.cnif <- CNIF(data=do.call(cbind,lapply(Y.model,function(x){x[[1]]})),init.adj=Y.sem,max_parent=3)
+  Y.out <- mat.sds(adj.group(Y.cnif*unlist(lapply(Y.model,function(x){diff(c(0,x[[2]]))})),rep(1:length(Y.model),sapply(Y.model,function(x){ncol(x[[1]])}))))
+  dimnames(Y.out) <- list(names(Y.model),names(Y.model))
+  plotnet(Y.out>0,'directed')
+  return(list(data=Y.model,adj=Y.out))
+}
+
+j <- 0
+Y.models_sig <- lapply(
+  expr,function(Y){
+    print(j<<-j+1)
+    Y.sig <- Y[names(Y)%in%pathlist[grep('Sig',pathlist[,1]),2]]
+    Y.d <- Y[names(Y)%in%pathlist[grep('Neurodegenerative',pathlist[,1]),2]]
+    list(signet=test(Y.sig),dnet=test(Y.d))
+})
