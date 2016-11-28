@@ -177,11 +177,61 @@ sem_grplasso2 <- function(Y
   #Result
   list(sem_l1=sem1,sem_grplasso=sem2)
 }
+#Other
+qpca <- function(A,rank=0,ifscale=TRUE){
+  if(ifscale){A <- scale(as.matrix(A))[,]}
+  A.svd <- svd(A)
+  if(rank==0){
+    d <- A.svd$d
+  } else {
+    d <- A.svd$d-A.svd$d[min(rank+1,nrow(A),ncol(A))]
+  }
+  d <- d[d > 1e-8]
+  r <- length(d)
+  prop <- d^2; info <- sum(prop)/sum(A.svd$d^2);prop <- cumsum(prop/sum(prop))
+  d <- diag(d,length(d),length(d))
+  u <- A.svd$u[,1:r,drop=F]
+  v <- A.svd$v[,1:r,drop=F]
+  x <- u%*%sqrt(d)
+  y <- sqrt(d)%*%t(v)
+  z <- x %*% y
+  rlt <- list(rank=r,X=x,Y=y,Z=x%*%y,prop=prop,info=info)
+  return(rlt)
+}
+pca <- function(X){
+  X <- scale(as.matrix(X))
+  m = nrow(X)
+  n = ncol(X)
+  Xeigen <- svd(X)
+  value <- (Xeigen$d)^2/m
+  value <- cumsum(value/sum(value))
+  score <- X %*% Xeigen$v
+  mat <- Xeigen$v
+  list(score=score,prop=value,mat=mat)
+}
 
 ###########################################
 # End of lib loading
 ###########################################
 
 ########################
-#Load data
+#Data Processing
 ########################
+
+setwd('C:/Users/zhu2/Documents/deconv/sj2016')
+load("decomp_forkl.rda")
+load("geneinpath.rda")
+load("pathlist.rda")
+
+geneinpath <- geneinpath[names(geneinpath)%in%pathlist[grep('Sig|Neurodegenerative',pathlist[,1]),2]]
+expr <- lapply(decomp_raw,function(x){
+  lapply(geneinpath,function(genes){
+    x <- x[,colnames(x)%in%genes,drop=F]
+    if(ncol(x)==1){
+      return(x)
+    }else{
+      x <- qpca(x,which(pca(x)$prop>=0.9)[1])
+      x$X[,1:which(x$prop>=.9)[1],drop=F]
+    }
+  })
+})
