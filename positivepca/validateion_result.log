@@ -1,0 +1,22 @@
+> summary(t(rmaxs))
+       V1               V2        
+ Min.   : 352.8   Min.   : 288.6  
+ 1st Qu.: 711.7   1st Qu.: 713.4  
+ Median : 806.4   Median : 809.2  
+ Mean   : 815.6   Mean   : 816.1  
+ 3rd Qu.: 910.9   3rd Qu.: 911.0  
+ Max.   :1588.1   Max.   :1504.6  
+> t.test(rmaxs[1,],rmaxs[2,])
+
+	Welch Two Sample t-test
+
+data:  rmaxs[1, ] and rmaxs[2, ]
+t = -0.22407, df = 19998, p-value = 0.8227
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -4.535083  3.604582
+sample estimates:
+mean of x mean of y 
+ 815.5991  816.0643 
+
+> 
