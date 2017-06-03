@@ -4,7 +4,9 @@ setwd('/home/zhu/deconv/data')
 load('processeddata.rda')
 
 pca <- function(X,prop=1){
+  X[is.na(X)] <- 0
   X <- scale(X)[,]
+  X[is.na(X)] <- 0
   m = nrow(X)
   n = ncol(X)
   Xeigen <- svd(X)
