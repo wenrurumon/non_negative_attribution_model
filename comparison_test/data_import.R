@@ -3,19 +3,6 @@ rm(list=ls())
 setwd('/home/zhu/deconv/data')
 library(data.table)
 
-#macro
-
-pca <- function(X,prop=1){
-  X <- scale(X)[,]
-  m = nrow(X)
-  n = ncol(X)
-  Xeigen <- svd(X)
-  value <- (Xeigen$d)^2/m
-  value <- cumsum(value/sum(value))
-  score <- X %*% Xeigen$v
-  score[,which(value>=prop)[1],drop=F]
-}
-
 #getdata
 raw <- lapply(dir()[!grepl('rda',dir())],fread)
 
