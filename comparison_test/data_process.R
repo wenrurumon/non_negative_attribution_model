@@ -63,7 +63,13 @@ adnidata$A2 <- Asplit
 #reference
   X <- apply(refdata$X,2,as.numeric)
   dimnames(X) <- dimnames(refdata$X)
-  Xsplit <- lapply(unique(refdata$cell),function(ci){
+  X <- do.call(cbind,lapply(unique(refdata$cell),function(ci){
     print(ci)
-    pca(X[,refdata$cell==ci,drop=F],prop=0.6)
-  })
+    out <- scale(pca(X[,refdata$cell==ci,drop=F],prop=0.6)$score2)
+    colnames(out) <- paste(ci,1:ncol(out))
+    out
+  }))
+  refdata$X2 <- X
+
+#save file
+save(rushdata,adnidata,refdata,file='processeddata.rda')
