@@ -69,7 +69,16 @@ adnidata$A2 <- Asplit
     colnames(out) <- paste(ci,1:ncol(out))
     out
   }))
-  refdata$X2 <- X
+  Xsplit <- lapply(gene_sel,function(gi){
+    out <- X[rownames(X)==gi,,drop=F]
+    if(nrow(out)>1){
+      out <- t(pca1(t(out)))
+    }
+    out
+  })
+  X2 <- t(do.call(rbind,Xsplit))
+  colnames(X2) <- gene_sel
+  refdata$X2 <- X2
 
 #save file
 save(rushdata,adnidata,refdata,file='processeddata.rda')
