@@ -20,8 +20,6 @@ X <- data.matrix(t(X))
 rlt1.rush <- CIBERSORT2(X,A)
 save(rlt1.rush,file='rlt1_rush.rda')
 
-###########################
-
 A <- A.adni %*% mat.adni
 X <- X.ref %*% mat.adni
 gcode <- paste0('g',1:ncol(A))
