@@ -22,7 +22,7 @@ Yrs <- Ystf.rush[match(pid,rownames(Ystf.rush)),]
 adnid <- read.csv("/home/zhu/deconv/data/ADNIMERGE.csv")
 adnid <- unique(adnid[,c(2,8)])
 pid <- paste(adnid[,1])
-da <- as.numeric(adnid[,2]=="AD")[match(rownames(Ynmf.adni),pid)]
+da <- 1-as.numeric(adnid[,2]=="CN")[match(rownames(Ynmf.adni),pid)]
 Yan <- Ynmf.adni
 Yas <- Ystf.adni
 
