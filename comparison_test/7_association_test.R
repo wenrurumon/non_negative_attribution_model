@@ -2,6 +2,7 @@
 rm(list=ls())
 setwd("/home/zhu/deconv")
 load('data/rlt4compare2.rda')
+load('data/rlt4compare3.rda')
 
 asso <- function(d,y,pen=0){
   y <- (y-pen) * ((y-pen)>0)
@@ -22,3 +23,5 @@ assob <- function(d,ys,yn){
 
 testr <- assob(dr,Yrn,Yrs)
 testa <- assob(da,Yan,Yas)
+testr2 <- assob(dr,Yrn2,Yrs2)
+testa2 <- assob(da,Yan2,Yas2)
