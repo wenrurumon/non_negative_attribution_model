@@ -151,10 +151,10 @@ Yan <- qnmf(A=A.adni,K=NULL,X=X.adni,a=0.5,lambda=0,maxitn=10000,deconv=T)$Y
 # Summary
 ###############
 
-Yas <- Yas[,1:153]
-Yan <- t(Yan)
-Yrs <- Yrs[,1:153]
-Yrn <- t(Yrn)
-save(Yas,Yan,Yrs,Yrn,file='rlt4compare3.rda')
+Yas2 <- Yas[,1:153]
+Yan2 <- t(Yan)
+Yrs2 <- Yrs[,1:153]
+Yrn2 <- t(Yrn)
+save(Yas2,Yan2,Yrs2,Yrn2,file='rlt4compare3.rda')
 
 
