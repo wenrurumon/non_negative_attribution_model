@@ -155,6 +155,17 @@ Yas2 <- Yas[,1:153]
 Yan2 <- t(Yan)
 Yrs2 <- Yrs[,1:153]
 Yrn2 <- t(Yrn)
+
+cell <- colnames(Yrs2)
+cell <- do.call(rbind,strsplit(cell,' '))[,1]
+agg2cell <- function(x){
+  t(apply(x,1,function(xi){tapply(xi,cell,sum)}))
+}
+Yan2 <- agg2cell(Yan2)
+Yas2 <- agg2cell(Yas2)
+Yrn2 <- agg2cell(Yrn2)
+Yrs2 <- agg2cell(Yrs2)
+
 save(Yas2,Yan2,Yrs2,Yrn2,file='rlt4compare3.rda')
 
 
