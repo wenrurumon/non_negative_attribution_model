@@ -67,7 +67,7 @@ adnidata$A2 <- Asplit
   dimnames(X) <- dimnames(refdata$X)
   X <- do.call(cbind,lapply(unique(refdata$cell),function(ci){
     print(ci)
-    out <- pca(X[,refdata$cell==ci,drop=F],prop=0.6)$score2
+    out <- pca(X[,refdata$cell==ci,drop=F],prop=0.75)$score2
     colnames(out) <- paste(ci,1:ncol(out))
     out
   }))
@@ -81,3 +81,80 @@ adnidata$A2 <- Asplit
   X2 <- t(do.call(rbind,Xsplit))
   colnames(X2) <- gene_sel
   refdata$X2 <- X2
+
+################
+#quickload
+################
+
+A.adni <- adnidata$A2
+A.rush <- rushdata$A2
+X.ref <- refdata$X2
+#save(A.adni,A.rush,X.ref,pca,file='quickload2.rda')
+
+################
+#pca mat
+################
+
+A.adni <- scale(A.adni); A.adni[is.na(A.adni)] <- 0
+A.rush <- scale(A.rush); A.rush[is.na(A.rush)] <- 0
+pca.adni <- pca(A.adni)
+pca.rush <- pca(A.rush)
+mat.adni <- pca.adni$mat[,1:which(pca.adni$value>0.8)[1],drop=F]
+mat.rush <- pca.rush$mat[,1:which(pca.rush$value>0.8)[1],drop=F]
+
+################
+#STF Method
+################
+
+setwd('/home/zhu/deconv/data')
+source('/home/zhu/deconv/CIBERSORT.R')
+
+A <- A.rush %*% mat.rush
+X <- X.ref %*% mat.rush
+gcode <- paste0('g',1:ncol(A))
+colnames(A) <- colnames(X) <- gcode
+A <- data.matrix(t(A))
+X <- data.matrix(t(X))
+Yrs <- CIBERSORT2(X,A)
+
+A <- A.adni %*% mat.adni
+X <- X.ref %*% mat.adni
+gcode <- paste0('g',1:ncol(A))
+colnames(A) <- colnames(X) <- gcode
+A <- data.matrix(t(A))
+X <- data.matrix(t(X))
+Yas <- CIBERSORT2(X,A)
+
+################
+#QNMF Method
+################
+
+source('/home/zhu/deconv/qnmf.R')
+A <- A.rush %*% mat.rush
+X <- X.ref %*% mat.rush
+gcode <- paste0('g',1:ncol(A))
+colnames(A) <- colnames(X) <- gcode
+A.rush <- data.matrix(t(A))
+X.rush <- data.matrix(t(X))
+
+A <- A.adni %*% mat.adni
+X <- X.ref %*% mat.adni
+gcode <- paste0('g',1:ncol(A))
+colnames(A) <- colnames(X) <- gcode
+A.adni <- data.matrix(t(A))
+X.adni <- data.matrix(t(X))
+
+Yrn <- qnmf(A=A.rush,K=NULL,X=X.rush,a=0.5,lambda=0,maxitn=10000,deconv=T)$Y
+Yan <- qnmf(A=A.adni,K=NULL,X=X.adni,a=0.5,lambda=0,maxitn=10000,deconv=T)$Y
+
+###############
+# Summary
+###############
+
+Yas <- Yas[,1:153]
+Yan <- t(Yan)
+Yrs <- Yrs[,1:153]
+Yrn <- t(Yrn)
+save(Yas,Yan,Yrs,Yrn,file='rlt4compare3.rda')
+
+
