@@ -166,6 +166,11 @@ Yas2 <- agg2cell(Yas2)
 Yrn2 <- agg2cell(Yrn2)
 Yrs2 <- agg2cell(Yrs2)
 
+load('rlt4compare2.rda')
+pid <- rownames(Yrs)
+Yrs2 <- Yrs2[match(pid,rownames(Yrs2)),]
+Yrn2 <- Yrn2[match(pid,rownames(Yrn2)),]
+
 save(Yas2,Yan2,Yrs2,Yrn2,file='rlt4compare3.rda')
 
 
