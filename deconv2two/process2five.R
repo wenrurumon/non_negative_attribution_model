@@ -96,6 +96,7 @@ ref <- lapply(ref,function(x){
 })
 expr <- t(raw_exp[,match(gene,colnames(raw_exp))])
 
-ref.pca <- lapply(ref,qpca2)
+save(ref,expr,file='data45cell.rda')
+
 
 
