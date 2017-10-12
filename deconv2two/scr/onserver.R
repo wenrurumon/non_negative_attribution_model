@@ -1,5 +1,12 @@
-
 rm(list=ls())
+library(assist)
+library(dHSIC)
+library(fANCOVA)
+library(psych)
+library(bnlearn)
+library(infotheo)
+library(descr)
+
 setwd('E:\\uthealth\\deconv\\20171009\\onserver')
 source("contiANM_1.3.R")
 source("contidANM.R")
