@@ -1,0 +1,21 @@
+cd /home/zhu/deconv/25cells
+R CMD BATCH --no-save --no-restore '--args 1' d.R &
+R CMD BATCH --no-save --no-restore '--args 2' d.R &
+R CMD BATCH --no-save --no-restore '--args 3' d.R &
+R CMD BATCH --no-save --no-restore '--args 4' d.R &
+R CMD BATCH --no-save --no-restore '--args 5' d.R &
+R CMD BATCH --no-save --no-restore '--args 6' d.R &
+R CMD BATCH --no-save --no-restore '--args 7' d.R &
+R CMD BATCH --no-save --no-restore '--args 8' d.R &
+R CMD BATCH --no-save --no-restore '--args 9' d.R &
+R CMD BATCH --no-save --no-restore '--args 10' d.R &
+R CMD BATCH --no-save --no-restore '--args 11' d.R &
+R CMD BATCH --no-save --no-restore '--args 12' d.R &
+R CMD BATCH --no-save --no-restore '--args 13' d.R &
+R CMD BATCH --no-save --no-restore '--args 14' d.R &
+R CMD BATCH --no-save --no-restore '--args 15' d.R &
+R CMD BATCH --no-save --no-restore '--args 16' d.R &
+R CMD BATCH --no-save --no-restore '--args 17' d.R &
+R CMD BATCH --no-save --no-restore '--args 18' d.R &
+R CMD BATCH --no-save --no-restore '--args 19' d.R &
+R CMD BATCH --no-save --no-restore '--args 20' d.R &
