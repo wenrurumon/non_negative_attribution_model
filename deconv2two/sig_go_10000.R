@@ -40,7 +40,7 @@ sel <- sel1|sel2
 sel <- which(sel)
 rm(sel1,sel2)
 
-selcut <- as.numeric(cut(1:length(sel),40))
+selcut <- as.numeric(cut(1:length(sel),400))
 
 arg <- as.numeric(commandArgs(trailingOnly=TRUE))
 if(length(arg)==0){
